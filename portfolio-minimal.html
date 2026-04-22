@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Makers Canvas — Mohammed Ismail</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #121212;
+    --text:      #F5F5F0;
+    --accent:    #C67B6F;
+    --muted:     rgba(245,245,240,0.35);
+    --divider:   rgba(245,245,240,0.08);
+    --sans:      'Inter', sans-serif;
+    --serif:     'DM Serif Display', serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-thumb { background: var(--accent); }
+
+  /* ── UTILITIES ── */
+  .label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  hr.rule {
+    border: none;
+    border-top: 1px solid var(--divider);
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 60px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--divider);
+  }
+
+  .nav-logo {
+    font-family: var(--sans);
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--text); text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex; gap: 40px; list-style: none;
+  }
+  .nav-links a {
+    font-size: 11px; font-weight: 400;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 120px 60px;
+    border-bottom: 1px solid var(--divider);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 80px;
+    padding-top: 140px;
+  }
+
+  .hero-left {}
+
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 40px;
+  }
+  .hero-eyebrow .line {
+    width: 28px; height: 1px; background: var(--accent);
+  }
+
+  .hero-name {
+    font-family: var(--serif);
+    font-size: clamp(3.2rem, 5.5vw, 6rem);
+    font-weight: 400; line-height: 1.0;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+  .hero-name em {
+    font-style: italic; color: var(--accent);
+  }
+
+  .hero-bio {
+    font-size: 1rem; font-weight: 300; line-height: 1.8;
+    color: rgba(245,245,240,0.65);
+    max-width: 420px;
+    margin-bottom: 48px;
+  }
+  .hero-bio strong { color: var(--text); font-weight: 500; }
+
+  .hero-keywords {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 32px;
+  }
+  .kw {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--divider);
+    padding: 5px 11px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .kw:hover { color: var(--accent); border-color: rgba(198,123,111,0.35); }
+
+  .hero-roles {
+    display: flex; flex-direction: column; gap: 8px;
+    padding-top: 32px;
+    border-top: 1px solid var(--divider);
+  }
+  .hero-role {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .hero-role::before {
+    content: ''; width: 4px; height: 4px;
+    background: var(--accent); border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .portrait-socials {
+    display: flex; justify-content: center; gap: 32px;
+    width: 380px;
+  }
+  .portrait-social-link {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-size: 11px; letter-spacing: 0.08em;
+    color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .portrait-social-link:hover { color: var(--accent); }
+
+  /* Portrait */
+  .hero-right {
+    display: flex; flex-direction: column; align-items: center; gap: 20px;
+  }
+  .portrait-frame {
+    width: 380px; height: 480px;
+    position: relative;
+  }
+  .portrait-bg {
+    position: absolute; inset: 0;
+    background: #1a1a1a;
+    border: 1px solid var(--divider);
+  }
+  .portrait-photo {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
+    filter: brightness(0.92) contrast(1.05);
+    background: #1a1a1a;
+  }
+  .portrait-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 24px;
+    border-top: 1px solid var(--divider);
+    background: rgba(18,18,18,0.9);
+  }
+  .portrait-label .p-name {
+    font-size: 13px; font-weight: 500; letter-spacing: 0.06em;
+    color: var(--text); display: block; margin-bottom: 4px;
+  }
+  .portrait-label .p-title {
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .portrait-corner {
+    position: absolute; width: 24px; height: 24px;
+  }
+  .portrait-corner.tl {
+    top: -1px; left: -1px;
+    border-top: 1px solid var(--accent);
+    border-left: 1px solid var(--accent);
+  }
+  .portrait-corner.br {
+    bottom: -1px; right: -1px;
+    border-bottom: 1px solid var(--accent);
+    border-right: 1px solid var(--accent);
+  }
+
+  /* ── PROJECTS ── */
+  #projects {}
+
+  .section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 64px;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
+    font-weight: 400; line-height: 1;
+    color: var(--text);
+  }
+  .section-count {
+    font-size: 11px; letter-spacing: 0.14em;
+    color: var(--muted);
+  }
+
+  .projects-column {
+    display: flex; flex-direction: column;
+  }
+
+  .project-entry {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    align-items: center;
+    gap: 40px;
+    padding: 36px 0;
+    border-top: 1px solid var(--divider);
+    transition: background 0.2s;
+  }
+  .project-entry:last-child { border-bottom: 1px solid var(--divider); }
+
+  .project-num {
+    font-size: 11px; font-weight: 400;
+    letter-spacing: 0.14em; color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .project-body {}
+  .project-desc {
+    font-size: 1.3rem; font-weight: 300;
+    color: var(--text); line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .project-meta {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .project-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); text-decoration: none;
+    border: 1px solid rgba(198,123,111,0.35);
+    padding: 10px 20px;
+    white-space: nowrap;
+    transition: background 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+  }
+  .project-link:hover {
+    background: rgba(198,123,111,0.08);
+    border-color: var(--accent);
+  }
+  .project-link svg { flex-shrink: 0; }
+
+  /* ── TIMELINE ── */
+  #timeline {}
+
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0;
+  }
+
+  .timeline-item {
+    display: contents;
+  }
+
+  .tl-left {
+    padding: 32px 40px 32px 0;
+    border-right: 1px solid var(--divider);
+    border-top: 1px solid var(--divider);
+    position: relative;
+  }
+  .tl-left::after {
+    content: '';
+    position: absolute; right: -4px; top: 40px;
+    width: 7px; height: 7px;
+    background: var(--bg);
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+  }
+  .tl-year {
+    font-size: 11px; letter-spacing: 0.14em;
+    color: var(--accent);
+  }
+  .tl-period {
+    font-size: 11px; color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .tl-right {
+    padding: 32px 0 32px 40px;
+    border-top: 1px solid var(--divider);
+  }
+  .tl-company {
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .tl-role {
+    font-size: 1.05rem; font-weight: 500;
+    color: var(--text); margin-bottom: 10px;
+  }
+  .tl-desc {
+    font-size: 0.88rem; font-weight: 300; line-height: 1.7;
+    color: rgba(245,245,240,0.55);
+  }
+
+  /* last item — no top border on the bottom */
+  .tl-spacer {
+    border-right: 1px solid var(--divider);
+    height: 40px;
+  }
+
+  .resume-download {
+    margin-top: 56px;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .resume-download .label { color: var(--muted); }
+  .btn-download {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--bg); text-decoration: none;
+    background: var(--accent);
+    padding: 12px 28px;
+    transition: opacity 0.2s;
+  }
+  .btn-download:hover { opacity: 0.85; }
+
+  /* ── SKILLS & EDUCATION ── */
+  #skills-edu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+  }
+
+  .block-title {
+    font-family: var(--serif);
+    font-size: 1.8rem; font-weight: 400;
+    color: var(--text); margin-bottom: 40px;
+  }
+
+  .skills-list {
+    display: flex; flex-direction: column; gap: 0;
+    list-style: none;
+  }
+  .skills-list li {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--divider);
+    font-size: 0.92rem; font-weight: 300;
+    color: rgba(245,245,240,0.75);
+  }
+  .skills-list li:first-child { border-top: 1px solid var(--divider); }
+  .skill-cat {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .edu-block { margin-bottom: 40px; }
+  .edu-block:last-child { margin-bottom: 0; }
+  .edu-degree {
+    font-size: 1rem; font-weight: 500;
+    color: var(--text); margin-bottom: 6px;
+  }
+  .edu-school {
+    font-size: 0.88rem; font-weight: 300;
+    color: rgba(245,245,240,0.55);
+  }
+  .edu-year-badge {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
+    border: 1px solid rgba(198,123,111,0.3);
+    padding: 4px 12px;
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .contact-left .block-title { margin-bottom: 20px; }
+  .contact-sub {
+    font-size: 0.9rem; font-weight: 300; line-height: 1.8;
+    color: rgba(245,245,240,0.5);
+    margin-bottom: 48px;
+  }
+  .contact-details { display: flex; flex-direction: column; gap: 20px; }
+  .contact-row {
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .contact-row .c-label {
+    min-width: 70px; font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
+    padding-top: 2px;
+  }
+  .contact-row .c-val {
+    font-size: 0.9rem; font-weight: 300;
+    color: rgba(245,245,240,0.7);
+  }
+  .contact-row a { color: inherit; text-decoration: none; }
+  .contact-row a:hover { color: var(--accent); }
+
+  .contact-form {
+    display: flex; flex-direction: column; gap: 28px;
+  }
+  .form-field {}
+  .form-label {
+    display: block;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .form-input, .form-textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--divider);
+    color: var(--text);
+    font-family: var(--sans); font-size: 0.9rem; font-weight: 300;
+    padding: 10px 0;
+    outline: none; resize: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-textarea:focus {
+    border-color: var(--accent);
+  }
+  .form-input::placeholder, .form-textarea::placeholder {
+    color: rgba(245,245,240,0.2);
+  }
+  .form-textarea { min-height: 100px; }
+  .btn-send {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--sans); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 14px 32px;
+    background: var(--accent); color: var(--bg);
+    border: none; cursor: pointer;
+    width: fit-content;
+    transition: opacity 0.2s;
+  }
+  .btn-send:hover { opacity: 0.85; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 32px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--divider);
+  }
+  .footer-copy {
+    font-size: 11px; letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+  .footer-copy span { color: var(--accent); }
+  .footer-links {
+    display: flex; gap: 32px;
+  }
+  .footer-links a {
+    font-size: 11px; letter-spacing: 0.1em;
+    color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--text); }
+
+  /* ── REVEAL ── */
+  .reveal {
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-d1 { transition-delay: 0.1s; }
+  .reveal-d2 { transition-delay: 0.2s; }
+  .reveal-d3 { transition-delay: 0.3s; }
+  .reveal-d4 { transition-delay: 0.4s; }
+
+  /* project rows are clickable */
+  .project-entry { cursor: pointer; }
+  .project-entry:hover .project-link {
+    background: rgba(198,123,111,0.08);
+    border-color: var(--accent);
+  }
+  .project-link { cursor: pointer; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(10,10,10,0.75);
+    backdrop-filter: blur(6px);
+    display: flex; justify-content: flex-end;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .modal-overlay.open {
+    opacity: 1; pointer-events: all;
+  }
+  .modal-panel {
+    width: min(680px, 90vw);
+    height: 100vh;
+    background: #161616;
+    border-left: 1px solid var(--divider);
+    display: flex; flex-direction: column;
+    transform: translateX(40px);
+    transition: transform 0.35s cubic-bezier(.23,1,.32,1);
+    overflow: hidden;
+  }
+  .modal-overlay.open .modal-panel {
+    transform: translateX(0);
+  }
+  .modal-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 20px;
+    padding: 40px 48px 32px;
+    border-bottom: 1px solid var(--divider);
+    flex-shrink: 0;
+  }
+  .modal-num {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); display: block; margin-bottom: 8px;
+  }
+  .modal-title {
+    font-family: var(--serif);
+    font-size: 1.6rem; font-weight: 400; line-height: 1.2;
+    color: var(--text); margin-bottom: 8px;
+  }
+  .modal-meta {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .modal-actions {
+    display: flex; align-items: center; gap: 14px; flex-shrink: 0;
+  }
+  .modal-gh-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); text-decoration: none;
+    border: 1px solid rgba(198,123,111,0.35);
+    padding: 9px 18px; white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .modal-gh-btn:hover { background: rgba(198,123,111,0.08); }
+  .modal-close {
+    width: 36px; height: 36px;
+    background: transparent; border: 1px solid var(--divider);
+    color: var(--muted); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s, color 0.2s; flex-shrink: 0;
+  }
+  .modal-close:hover { border-color: var(--text); color: var(--text); }
+
+  .modal-body {
+    flex: 1; overflow-y: auto;
+    padding: 40px 48px 60px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
+  }
+  /* README rendered styles */
+  .modal-body h1 {
+    font-family: var(--serif); font-size: 1.5rem; font-weight: 400;
+    color: var(--text); margin: 0 0 24px; line-height: 1.2;
+  }
+  .modal-body h2 {
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--accent);
+    margin: 36px 0 14px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--divider);
+  }
+  .modal-body h3 {
+    font-size: 0.88rem; font-weight: 500; color: var(--text);
+    margin: 24px 0 10px;
+  }
+  .modal-body p {
+    font-size: 0.9rem; font-weight: 300; line-height: 1.8;
+    color: rgba(245,245,240,0.65); margin: 0 0 16px;
+  }
+  .modal-body ul, .modal-body ol {
+    padding-left: 0; margin: 0 0 16px;
+    list-style: none;
+  }
+  .modal-body li {
+    font-size: 0.88rem; font-weight: 300; line-height: 1.75;
+    color: rgba(245,245,240,0.6);
+    padding: 5px 0 5px 20px; position: relative;
+    border-bottom: 1px solid rgba(245,245,240,0.04);
+  }
+  .modal-body li::before {
+    content: '—'; position: absolute; left: 0;
+    color: var(--accent); font-size: 0.75rem;
+  }
+  .modal-body strong { color: var(--text); font-weight: 500; }
+  .modal-body code {
+    font-family: 'Courier New', monospace; font-size: 0.78rem;
+    background: rgba(255,255,255,0.05); border: 1px solid var(--divider);
+    padding: 2px 7px; color: rgba(245,245,240,0.75);
+  }
+  .modal-body pre {
+    background: #0e0e0e; border: 1px solid var(--divider);
+    padding: 20px 24px; margin: 16px 0 24px; overflow-x: auto;
+  }
+  .modal-body pre code {
+    background: none; border: none; padding: 0;
+    font-size: 0.78rem; line-height: 1.7; color: rgba(245,245,240,0.6);
+  }
+  .modal-body blockquote {
+    border-left: 2px solid var(--accent);
+    margin: 16px 0; padding: 10px 20px;
+    background: rgba(198,123,111,0.05);
+  }
+  .modal-body blockquote p { margin: 0; color: rgba(245,245,240,0.55); font-style: italic; }
+  .modal-body table {
+    width: 100%; border-collapse: collapse; margin: 16px 0 24px;
+    font-size: 0.82rem;
+  }
+  .modal-body th {
+    text-align: left; padding: 10px 14px;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); border-bottom: 1px solid var(--divider);
+    font-weight: 500;
+  }
+  .modal-body td {
+    padding: 10px 14px; color: rgba(245,245,240,0.6);
+    border-bottom: 1px solid rgba(245,245,240,0.04);
+    font-weight: 300;
+  }
+  .modal-body a {
+    color: var(--accent); text-decoration: none;
+    border-bottom: 1px solid rgba(198,123,111,0.3);
+    transition: border-color 0.2s;
+  }
+  .modal-body a:hover { border-color: var(--accent); }
+  .modal-body img { display: none; } /* hide GitHub images — they won't load cross-origin */
+  .modal-body hr {
+    border: none; border-top: 1px solid var(--divider); margin: 28px 0;
+  }
+
+
+  @media (max-width: 900px) {
+    nav { padding: 22px 24px; }
+    section { padding: 80px 24px; }
+    #hero { grid-template-columns: 1fr; padding-top: 120px; gap: 60px; }
+    .hero-right { justify-content: flex-start; }
+    .portrait-frame { width: 100%; max-width: 320px; height: 380px; }
+    .project-entry { grid-template-columns: 40px 1fr; }
+    .project-link { display: none; }
+    .timeline-grid { grid-template-columns: 120px 1fr; }
+    #skills-edu { grid-template-columns: 1fr; gap: 60px; }
+    #contact { grid-template-columns: 1fr; gap: 60px; }
+    footer { flex-direction: column; gap: 16px; padding: 24px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero"></a>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#timeline">Timeline</a></li>
+    <li><a href="#skills-edu">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow reveal">
+      <div class="line"></div>
+      <span class="label">Mohammed Ismail</span>
+    </div>
+
+    <h1 class="hero-name reveal reveal-d1">
+      Integration<br><em>Specialist</em>
+    </h1>
+
+    <p class="hero-bio reveal reveal-d2">
+      <strong>7+ years</strong> connecting enterprise systems through robust API integrations,
+      CRM implementations, and workflow automation — turning complex data flows into
+      reliable, scalable pipelines.
+    </p>
+
+    <div class="hero-keywords reveal reveal-d2">
+      <span class="kw">OAuth 2.0</span>
+      <span class="kw">REST API</span>
+      <span class="kw">Salesforce</span>
+      <span class="kw">HubSpot</span>
+      <span class="kw">Dynamics 365</span>
+      <span class="kw">Webhooks</span>
+      <span class="kw">GTM Studio</span>
+      <span class="kw">MCP</span>
+      <span class="kw">Zapier</span>
+      <span class="kw">n8n</span>
+      <span class="kw">Postman</span>
+      <span class="kw">JSON</span>
+      <span class="kw">SQL</span>
+      <span class="kw">DataDog</span>
+      <span class="kw">GitHub</span>
+      <span class="kw">HTML</span>
+      <span class="kw">JavaScript</span>
+    </div>
+
+    <div class="hero-roles reveal reveal-d3">
+      <span class="hero-role">API &amp; Integration Specialist</span>
+      <span class="hero-role">CRM Architect</span>
+      <span class="hero-role">Workflow Automation Engineer</span>
+    </div>
+  </div>
+
+  <div class="hero-right reveal reveal-d2">
+    <div class="portrait-frame">
+      <div class="portrait-bg"></div>
+      <img src="Untitled design.png" alt="Mohammed Ismail" class="portrait-photo">
+      <div class="portrait-corner tl"></div>
+      <div class="portrait-corner br"></div>
+      <div class="portrait-label">
+        <span class="p-name">Mohammed Ismail</span>
+        <span class="p-title">Integration Specialist · Chennai</span>
+      </div>
+    </div>
+    <div class="portrait-socials">
+      <a href="https://www.linkedin.com/in/izsmail/" target="_blank" class="portrait-social-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+        linkedin.com/in/izsmail
+      </a>
+      <a href="https://github.com/Iszzmail" target="_blank" class="portrait-social-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+        </svg>
+        github.com/Iszzmail
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROJECT MODAL ── -->
+<div id="project-modal" class="modal-overlay" role="dialog" aria-modal="true">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <div>
+        <span class="modal-num" id="modal-num"></span>
+        <h3 class="modal-title" id="modal-title"></h3>
+        <span class="modal-meta" id="modal-meta"></span>
+      </div>
+      <div class="modal-actions">
+        <a id="modal-github-link" href="#" target="_blank" class="modal-gh-btn">
+          View on GitHub
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+        </a>
+        <button class="modal-close" id="modal-close" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- ── PROJECTS ── -->
+<section id="projects">
+  <div class="section-head reveal">
+    <h2 class="section-title">Projects</h2>
+    <span class="section-count label">04 selected works</span>
+  </div>
+
+  <div class="projects-column">
+
+    <div class="project-entry reveal reveal-d1" data-project="0" role="button" tabindex="0">
+      <span class="project-num">01</span>
+      <div class="project-body">
+        <div class="project-desc">Salesforce case list view enhancer</div>
+        <div class="project-meta">Chrome Extension · JavaScript · Salesforce</div>
+      </div>
+      <span class="project-link">
+        Read more
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+      </span>
+    </div>
+
+    <div class="project-entry reveal reveal-d2" data-project="1" role="button" tabindex="0">
+      <span class="project-num">02</span>
+      <div class="project-body">
+        <div class="project-desc">Collaborative Jira triage dashboard</div>
+        <div class="project-meta">Google Apps Script · Google Sheets · Jira Cloud</div>
+      </div>
+      <span class="project-link">
+        Read more
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+      </span>
+    </div>
+
+    <div class="project-entry reveal reveal-d3" data-project="2" role="button" tabindex="0">
+      <span class="project-num">03</span>
+      <div class="project-body">
+        <div class="project-desc">Gmail expense data visualization</div>
+        <div class="project-meta">Google Apps Script · Gmail API · Google Sheets</div>
+      </div>
+      <span class="project-link">
+        Read more
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+      </span>
+    </div>
+
+    <div class="project-entry reveal reveal-d4" data-project="3" role="button" tabindex="0">
+      <span class="project-num">04</span>
+      <div class="project-body">
+        <div class="project-desc">OAuth 2.0 API explorer with auth flows</div>
+        <div class="project-meta">Flask · Python · HTML · ZoomInfo API</div>
+      </div>
+      <span class="project-link">
+        Read more
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+      </span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── TIMELINE ── -->
+<section id="timeline">
+  <div class="section-head reveal">
+    <h2 class="section-title">Professional Timeline</h2>
+  </div>
+
+  <div class="timeline-grid">
+
+    <div class="tl-left reveal">
+      <div class="tl-year">'22 – Now</div>
+      <div class="tl-period">3 years</div>
+    </div>
+    <div class="tl-right reveal reveal-d1">
+      <div class="tl-company">ZoomInfo · Chennai</div>
+      <div class="tl-role">Integration Specialist (API &amp; UI)</div>
+      <div class="tl-desc">
+        End-to-end integrations for Salesforce, HubSpot, Dynamics 365, Marketo, and Outreach.
+        API SME for OAuth 2.0, PKCE, and Client Credentials flows. Leveraged MCP in Claude
+        and GTM Studio for automated data pipelines. Jira SPOC for end-to-end issue resolution.
+      </div>
+    </div>
+
+    <div class="tl-left reveal">
+      <div class="tl-year">'21 – '22</div>
+      <div class="tl-period">8 months</div>
+    </div>
+    <div class="tl-right reveal reveal-d1">
+      <div class="tl-company">Bolt · Bangalore</div>
+      <div class="tl-role">Product Specialist</div>
+      <div class="tl-desc">
+        First point of contact for API and SDK queries. Launched new API endpoints
+        driving a 25% sales increase. Resolved 50+ critical SDK bugs improving stability
+        for 500+ enterprise users.
+      </div>
+    </div>
+
+    <div class="tl-left reveal">
+      <div class="tl-year">'19 – '21</div>
+      <div class="tl-period">2 years</div>
+    </div>
+    <div class="tl-right reveal reveal-d1">
+      <div class="tl-company">Wipro · Chennai</div>
+      <div class="tl-role">Senior Associate</div>
+      <div class="tl-desc">
+        Managed 1,000+ client requests monthly. Reduced resolution time by 25%.
+        Configured applications for 500+ users across structured case management workflows.
+      </div>
+    </div>
+
+    <div class="tl-spacer"></div>
+    <div></div>
+
+  </div>
+
+  <div class="resume-download reveal">
+    <span class="label">Full career history</span>
+    <a href="Ismail's Resume Aug.pdf" download class="btn-download">
+      Download Resume
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M6 1v7M3 5l3 3 3-3M1 10h10" stroke="currentColor" stroke-width="1.2"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<!-- ── SKILLS & EDUCATION ── -->
+<section id="skills-edu" style="padding-top:100px; padding-bottom:100px;">
+  <div style="grid-column: 1 / -1; margin-bottom: 64px;" class="reveal">
+    <!-- intentional — heading spans full width via parent grid -->
+  </div>
+
+  <div>
+    <h2 class="block-title reveal">Skills</h2>
+    <ul class="skills-list">
+      <li class="reveal reveal-d1">
+        <span>REST API · OAuth 2.0 · PKCE · Webhooks</span>
+        <span class="skill-cat">Integration</span>
+      </li>
+      <li class="reveal reveal-d1">
+        <span>Salesforce · HubSpot · Dynamics 365 · Marketo</span>
+        <span class="skill-cat">CRM</span>
+      </li>
+      <li class="reveal reveal-d2">
+        <span>MCP (Claude) · GTM Studio · Zapier · n8n · Clay</span>
+        <span class="skill-cat">AI &amp; Automation</span>
+      </li>
+      <li class="reveal reveal-d2">
+        <span>JavaScript · HTML · SQL · SOQL</span>
+        <span class="skill-cat">Languages</span>
+      </li>
+      <li class="reveal reveal-d3">
+        <span>Jira · DataDog · Postman · BigQuery · Snowflake</span>
+        <span class="skill-cat">Tooling</span>
+      </li>
+      <li class="reveal reveal-d3">
+        <span>Design Thinking · Problem Solving · Collaboration</span>
+        <span class="skill-cat">Approach</span>
+      </li>
+    </ul>
+  </div>
+
+  <div>
+    <h2 class="block-title reveal">Education</h2>
+
+    <div class="edu-block reveal reveal-d1">
+      <div class="edu-degree">Masters in Information Technology</div>
+      <div class="edu-school">The New College, Chennai</div>
+      <span class="edu-year-badge">2019</span>
+    </div>
+
+    <hr class="rule" style="margin: 32px 0;">
+
+    <div class="edu-block reveal reveal-d2">
+      <div style="font-size:0.88rem; font-weight:300; line-height:1.8; color:rgba(245,245,240,0.5);">
+        Continuously self-directed — API documentation, OAuth 2.0 protocol specifications,
+        AI/MCP tooling, and enterprise integration patterns.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="contact-left">
+    <h2 class="block-title reveal">Get in Touch</h2>
+    <p class="contact-sub reveal reveal-d1">
+      Open to new roles, collaborations, and interesting problems.
+      If you're building something that needs reliable integrations, let's talk.
+    </p>
+    <div class="contact-details">
+      <div class="contact-row reveal reveal-d1">
+        <span class="c-label">Email</span>
+        <span class="c-val"><a href="mailto:ismailmohammed200@gmail.com">ismailmohammed200@gmail.com</a></span>
+      </div>
+      <div class="contact-row reveal reveal-d2">
+        <span class="c-label">Phone</span>
+        <span class="c-val">+91 98404 06451</span>
+      </div>
+      <div class="contact-row reveal reveal-d2">
+        <span class="c-label">Location</span>
+        <span class="c-val">Chennai, India</span>
+      </div>
+      <div class="contact-row reveal reveal-d3">
+        <span class="c-label">LinkedIn</span>
+        <span class="c-val"><a href="https://linkedin.com/in/izsmail" target="_blank">linkedin.com/in/izsmail</a></span>
+      </div>
+      <div class="contact-row reveal reveal-d3">
+        <span class="c-label">GitHub</span>
+        <span class="c-val"><a href="https://github.com/Iszzmail" target="_blank">github.com/Iszzmail</a></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-right reveal reveal-d2">
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-field">
+        <label class="form-label">Name</label>
+        <input class="form-input" type="text" placeholder="Your name" required>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="your@email.com" required>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" placeholder="What's on your mind?" required></textarea>
+      </div>
+      <button type="submit" class="btn-send">Send Message</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-copy">&copy; 2025 <span>Mohammed Ismail</span></span>
+  <div class="footer-links">
+    <a href="https://github.com/Iszzmail" target="_blank">GitHub</a>
+    <a href="https://linkedin.com/in/izsmail" target="_blank">LinkedIn</a>
+    <a href="mailto:ismailmohammed200@gmail.com">Email</a>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.btn-send');
+    btn.textContent = 'Sent ✓';
+    btn.style.background = '#5a8a6a';
+    setTimeout(() => {
+      btn.textContent = 'Send Message';
+      btn.style.background = '';
+      e.target.reset();
+    }, 3000);
+  }
+
+  // ── PROJECT MODAL ──
+  const PROJECTS = [
+    {
+      num: '01',
+      title: 'Salesforce Case List View Enhancer',
+      meta: 'Chrome Extension · JavaScript · Salesforce',
+      github: 'https://github.com/Iszzmail/Salesforce-Colorizer-with-Auto-refresh-First-response-timer',
+      readme: `# Salesforce Colorizer — Auto-refresh + First Response Timer
+
+> A Chrome extension that supercharges your Salesforce Case list view with **live timers**, **smart row colors**, **auto-refresh**, and **case notes** — so your support team never misses a beat.
+
+## What It Does
+
+### 1. First Response Timer
+Displays a live elapsed-time badge directly in the **First Response** column for any case that hasn't been responded to yet.
+
+- Counts **up** from the moment the case was created (Date/Time Opened)
+- Updates every **minute** with zero flickering
+- Timer **automatically disappears** once a First Response is sent
+
+| Elapsed Time | Display |
+| Under 1 hour | \`43 min\` |
+| Under 1 day | \`3 hr 12 min\` |
+| 1 day or more | \`2 days 4 hr\` |
+
+### 2. Timer Color Thresholds
+The timer badge color changes automatically based on how long a case has been waiting:
+
+| Time Elapsed | Color |
+
+| 0 – 14 min | Green |
+| 15+ min | Yellow |
+| 30+ min | Orange |
+| 45+ min | Red |
+
+Add as many thresholds as you want directly from the popup.
+
+### 3. Row Colorizing
+Automatically highlights case rows based on smart rules:
+
+- **Action Needed** — JIRA closed + Technical Issue/Bug + not updated in 24hrs
+- **Platinum Support** — Account Support Tier is PLATINUM SUPPORT
+- **Empty First Response** — No first response sent yet
+- **Closed JIRA Status** — JIRA is Released / Done / Cancelled
+- **Last Modified > 24 hrs** — Case hasn't been touched in over a day
+- **Custom Account Rules** — Assign any color to any account name
+
+### 4. Tab Auto-Refresh
+Automatically refreshes your Salesforce list view at a set interval (default: every 5 minutes).
+
+### 5. Case Notes
+Add private internal notes to any case right from the list view. Notes are saved to your browser and persist across sessions.
+
+## Requirements
+
+### Only Works on Salesforce Lightning List Views
+This extension only activates on URLs matching: \`https://*.lightning.force.com/*\`
+
+### Required Columns in Your List View
+
+| Column | Why It's Needed |
+
+| First Response | Timer appears when empty, disappears when filled |
+| Date/Time Opened | Used to calculate elapsed time |
+| Case Number | Required for case notes |
+| Subject | Required for the notes icon |
+| Status | Required for responded/re-opened badge |
+| Last Modified Date | Required for "Last Modified > 24 hrs" rule |
+| Account Name | Required for custom account color rules |
+| Account Support Tier | Required for Platinum Support highlighting |
+| JIRA Status | Required for JIRA-based coloring |
+
+## Installation
+
+1. Download or clone this repository
+2. Open Chrome and go to \`chrome://extensions\`
+3. Enable **Developer Mode** (toggle in the top right)
+4. Click **Load unpacked**
+5. Select the folder containing this extension
+6. Navigate to your Salesforce Case list view — it activates automatically
+
+## Popup Controls
+
+| Setting | What It Does |
+|---|---|
+| Enable Highlighter | Master on/off switch |
+| Tab Auto Refresh | Toggle and set interval in minutes |
+| Coloring Rules | Enable/disable each rule and pick its color |
+| Timer Highlight Rules | Set minute thresholds and colors |
+| Custom Account Rules | Assign colors to specific accounts |
+| Notes | Clear all saved case notes |`
+    },
+    {
+      num: '02',
+      title: 'Smart Jira Triage Dashboard',
+      meta: 'Google Apps Script · Google Sheets · Jira Cloud',
+      github: 'https://github.com/Iszzmail/Smart-Jira-Triage-Dashboard/tree/main',
+      readme: `# Smart Jira Triage Dashboard
+
+An automated, stateful tracking dashboard built on Google Sheets and Google Apps Script to manage high volumes of Jira tickets.
+
+## Overview
+
+When tracking multiple bug reports and feature requests in Jira, native notifications can become noisy. Standard data exports often create cluttered, duplicate rows every time a developer drops a new comment.
+
+This project solves that bottleneck by transforming a chaotic raw Jira data export into a clean, actionable, real-time alert system. It acts as a **middleware layer** within Google Sheets, enforcing deduplication, managing state, and providing visual alerts for new engineer comments.
+
+## Features
+
+- **Intelligent Deduplication:** Automatically groups raw Jira data by Issue Key, strictly enforcing a "One Row Per Ticket" rule and extracting only the absolute latest comment.
+- **Stateful Memory & Visual Alerts:** Uses Google Apps Script's \`PropertiesService\` to remember the exact timestamp a ticket was last reviewed. If an engineer updates the ticket, the script instantly highlights the row in teal.
+- **Zero-Latency UX:** Features an interactive "Mark Read" checkbox column powered by \`onEdit\` triggers. Clicking the checkbox instantly removes the highlight and commits the new timestamp to memory — no waiting for the next hourly data sync.
+- **Dynamic Deep Linking:** Automatically generates clickable hyperlinks to the exact Jira ticket for seamless navigation.
+
+## Tech Stack
+
+- **Google Apps Script (JavaScript):** Core automation, data parsing, and persistent state management.
+- **Google Sheets API:** The lightweight, accessible front-end UI.
+- **Jira Cloud:** Source of truth for ticket data (ingested via a 3rd-party Google Sheets Jira connector).
+
+## Setup & Installation
+
+### 1. Prepare Your Google Sheet
+1. Create a sheet named \`JiraRawImport\`
+2. Configure your Jira connector to pull data into this sheet
+3. Ensure you import: \`Key\`, \`Comment.text\`, and \`Updated\` columns at minimum
+
+### 2. Add the Apps Script
+1. In your Google Sheet, navigate to **Extensions > Apps Script**
+2. Delete any code in the default \`Code.gs\` file and paste the script from this repository
+3. Save the project
+
+### 3. Configure the Variables
+
+\`\`\`javascript
+const KEY_COLUMN_HEADER = "Key";
+const COMMENT_TEXT_COLUMN_HEADER = "Comment.text";
+const ISSUE_UPDATED_DATE_COLUMN_HEADER = "Updated";
+const JIRA_INSTANCE_URL = "https://YOUR_DOMAIN.atlassian.net";
+\`\`\`
+
+### 4. Set Up Automation Triggers
+1. In the Apps Script editor, click the Triggers icon (clock) on the left sidebar
+2. Click **+ Add Trigger**
+3. Function to run: \`runHourlyDashboardUpdate\`
+4. Event source: Time-driven, Hour timer
+5. Save the trigger
+
+## How to Use
+
+1. Open your Google Sheet — the custom menu **Jira Dashboard Tools** will appear
+2. Click **Jira Dashboard Tools > Run Update** to manually force a sync
+3. Switch to the \`JiraDashboardData\` sheet
+4. Any ticket with a new comment since your last check will be highlighted in teal
+5. Read the comment, then click the **Mark Read** checkbox — highlight disappears instantly`
+    },
+    {
+      num: '03',
+      title: 'Gmail Expense Tracker',
+      meta: 'Google Apps Script · Gmail API · Google Sheets',
+      github: 'https://github.com/Iszzmail/Expense-tracker-based-on-email-alerts',
+      readme: `# Expense Tracker: Gmail to Google Sheets
+
+This project uses Google Apps Script to automatically scan your Gmail for HDFC transactions (RuPay Credit Card & Bank Account) and save them to a Google Sheet.
+
+## Features
+
+- **Centralized Tracking:** Writes all transactions to a single sheet named **"Expense tracker"**
+- **Multi-Account:** Tracks bank spending alert emails by looking for keywords — for example:
+  - \`RuPay CC XX7652\`
+  - \`Account 7616\`
+
+> Note: You would need to find the keywords common in your own bank's email alerts.
+
+- **Duplicate Prevention:** Uses the **UPI Transaction Reference Number** to ensure no duplicate entries
+- **Start Date:** Configured to start tracking from a specific date
+
+## Setup Instructions
+
+### 1. Prepare the Google Sheet
+1. Create a new Google Sheet
+2. The script will automatically create a tab named **"Expense tracker"** if it doesn't exist
+
+### 2. Add the Script
+1. In your Google Sheet, go to **Extensions > Apps Script**
+2. Delete any code in the \`Code.gs\` file and paste the content from this project
+3. Save the project (Cmd/Ctrl + S)
+
+### 3. Test the Script
+1. Select the \`processEmails\` function and click **Run**
+2. Check your Google Sheet — you should see a tab named "Expense tracker" with your transactions
+
+### 4. Automate with Triggers
+
+| Setting | Value |
+|---|---|
+| Function to run | \`processEmails\` |
+| Event source | Time-driven |
+| Trigger type | Hour timer |
+| Interval | Every 2 hours |
+
+## How It Works
+
+The script scans your Gmail inbox for emails from your bank that match the configured keywords. When a matching email is found, it parses the transaction details (amount, merchant, date, reference number) and appends them to the Google Sheet. The UPI reference number is used as a unique key to prevent duplicate rows on subsequent runs.`
+    },
+    {
+      num: '04',
+      title: 'ZoomInfo OAuth 2.0 API Explorer',
+      meta: 'Flask · Python · HTML · ZoomInfo API',
+      github: '#',
+      readme: `# ZoomInfo OAuth 2.0 API Explorer
+
+An internal API explorer built with Flask that provides a visual, interactive interface for the ZoomInfo GTM API — built to train the team on OAuth 2.0 Client Credentials flow.
+
+## Overview
+
+This tool was built to help the integrations team understand and test ZoomInfo's API endpoints without needing to write raw curl commands or use Postman manually. The key feature is a **real-time animated OAuth 2.0 flow visualizer** that shows exactly what happens during authentication.
+
+## Features
+
+- **OAuth 2.0 Animated Flow Visualizer:** A modal that appears on every API request, showing each step of the Client Credentials authentication in real time — token request, server response, token caching, and API call.
+- **Token Caching:** Access tokens are cached with a 55-minute TTL, matching ZoomInfo's token expiry, so the team can see how refresh logic works.
+- **Request Body Inspector:** A persistent panel that stays visible after results load, showing the exact JSON payload sent to the API.
+- **Tabbed Endpoint UI:** Clean tabbed navigation across all implemented endpoints.
+
+## Endpoints Implemented
+
+### Search
+- Contacts
+- Companies
+- Intent
+- News
+- Scoops
+
+### Enrich
+- Contacts
+- Companies
+- Intent
+- News
+
+## Technical Notes
+
+- **Enrich endpoints** use the \`{"data": {"attributes": [record]}}\` structure with all fields explicitly cast to string
+- **Search endpoints** use the \`{"data": {"attributes": {...}}}\` structure
+- The app runs on **port 8081**
+- Built with Flask (Python) backend and a single-page HTML frontend
+
+## Purpose
+
+This was an internal training tool to teach the support team how Client ID + Secret / JWT OAuth 2.0 works end-to-end — from credential exchange to token storage to authenticated API requests.`
+    }
+  ];
+
+  // Simple markdown → HTML renderer
+  function renderMarkdown(md) {
+    return md
+      // headings
+      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+      .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+      // blockquote
+      .replace(/^> (.+)$/gm, '<blockquote><p>$1</p></blockquote>')
+      // hr
+      .replace(/^---$/gm, '<hr>')
+      // bold
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      // inline code
+      .replace(/`([^`\n]+)`/g, '<code>$1</code>')
+      // code blocks
+      .replace(/```[\w]*\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+      // tables
+      .replace(/^\|(.+)\|$/gm, (match) => match)  // preserve for table parser below
+      // unordered lists
+      .replace(/^[-*] (.+)$/gm, '<li>$1</li>')
+      .replace(/(<li>.*<\/li>\n?)+/g, (block) => '<ul>' + block + '</ul>')
+      // paragraphs — wrap lone lines
+      .replace(/^(?!<[a-z]|<\/[a-z])(.+)$/gm, (line) => {
+        if (line.trim() === '') return '';
+        return '<p>' + line + '</p>';
+      })
+      // table parsing
+      .replace(/((?:\|.+\|\n?)+)/g, (tableBlock) => {
+        const rows = tableBlock.trim().split('\n').filter(r => !/^\|[-| :]+\|$/.test(r));
+        if (rows.length < 1) return tableBlock;
+        const header = rows[0].split('|').filter(c => c.trim()).map(c => `<th>${c.trim()}</th>`).join('');
+        const body = rows.slice(1).map(r => {
+          const cells = r.split('|').filter(c => c.trim()).map(c => `<td>${c.trim()}</td>`).join('');
+          return `<tr>${cells}</tr>`;
+        }).join('');
+        return `<table><thead><tr>${header}</tr></thead><tbody>${body}</tbody></table>`;
+      })
+      // links
+      .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank">$1</a>');
+  }
+
+  const modal = document.getElementById('project-modal');
+  const modalClose = document.getElementById('modal-close');
+
+  function openModal(index) {
+    const p = PROJECTS[index];
+    document.getElementById('modal-num').textContent = p.num + ' / PROJECT';
+    document.getElementById('modal-title').textContent = p.title;
+    document.getElementById('modal-meta').textContent = p.meta;
+    document.getElementById('modal-github-link').href = p.github;
+    if (p.github === '#') document.getElementById('modal-github-link').style.display = 'none';
+    else document.getElementById('modal-github-link').style.display = '';
+    document.getElementById('modal-body').innerHTML = renderMarkdown(p.readme);
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.project-entry').forEach(entry => {
+    entry.addEventListener('click', () => openModal(+entry.dataset.project));
+    entry.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openModal(+entry.dataset.project); });
+  });
+
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
